@@ -1,3 +1,11 @@
+test.py
+params.txt
+osc_live_params.json
+vrchat_settings_cache.json
+tests
+
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

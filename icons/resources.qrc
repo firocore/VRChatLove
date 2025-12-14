@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>header/settings.svg</file>
+    <file>sidebar/human.svg</file>
+    <file>sidebar/human_on.svg</file>
+    <file>sidebar/settings.svg</file>
+    <file>sidebar/settings_on.svg</file>
+    <file>sidebar/tool.svg</file>
+    <file>sidebar/tool_on.svg</file>
+    <file>sidebar/toys.svg</file>
+    <file>sidebar/toys_on.svg</file>
+    <file>header/download.svg</file>
+    <file>header/window-close.svg</file>
+    <file>header/window-minimize.svg</file>
+    <file>header/window-restore.svg</file>
+  </qresource>
+</RCC>
