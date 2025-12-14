@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QPushButton, QSizePolicy, QToolButton,
-    QVBoxLayout, QWidget)
-
+    QMainWindow, QPushButton, QSizePolicy, QStackedWidget,
+    QToolButton, QVBoxLayout, QWidget)
+from app.ui import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -322,14 +322,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.sidebar)
 
-        self.widget = QWidget(self.body)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMaximumSize(QSize(16777215, 16777215))
-        self.widget.setFont(font1)
-        self.widget.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
+        self.stackedWidget = QStackedWidget(self.body)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.stackedWidget.setMaximumSize(QSize(16777215, 16777215))
+        self.stackedWidget.setFont(font1)
+        self.stackedWidget.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
 "border-radius: 10px;")
+        self.empty_page = QWidget()
+        self.empty_page.setObjectName(u"empty_page")
+        self.stackedWidget.addWidget(self.empty_page)
 
-        self.horizontalLayout_2.addWidget(self.widget)
+        self.horizontalLayout_2.addWidget(self.stackedWidget)
 
 
         self.verticalLayout_2.addWidget(self.body)
