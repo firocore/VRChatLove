@@ -31,7 +31,8 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(0, 16, 28);
-border: none;</string>
+border: none;
+border-radius: 10px;</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -190,6 +191,9 @@ border-radius: 5px;</string>
           </item>
           <item>
            <widget class="QToolButton" name="button_download">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="font">
              <font>
               <pointsize>12</pointsize>

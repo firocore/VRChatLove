@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QMainWindow, QPushButton, QSizePolicy, QToolButton,
     QVBoxLayout, QWidget)
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -33,7 +34,8 @@ class Ui_MainWindow(object):
         icon.addFile(u":/icons/sidebar/toys.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"background-color: rgb(0, 16, 28);\n"
-"border: none;")
+"border: none;\n"
+"border-radius: 10px;")
         MainWindow.setDocumentMode(False)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -103,6 +105,7 @@ class Ui_MainWindow(object):
 
         self.button_download = QToolButton(self.info)
         self.button_download.setObjectName(u"button_download")
+        self.button_download.setEnabled(True)
         font3 = QFont()
         font3.setPointSize(12)
         self.button_download.setFont(font3)
