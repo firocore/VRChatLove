@@ -22,5 +22,5 @@ class VersionChecker(QObject):
                 version = match.group(1) if match else ""
                 self.versionChecked.emit(version)
             except Exception as e:
-                print(f"Ошибка при получении версии: {e}")
+                print(f"Error retrieving version: {e}")
                 self.versionChecked.emit("")

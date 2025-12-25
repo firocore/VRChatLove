@@ -22,11 +22,13 @@ class Ui_Assignment(object):
     def setupUi(self, Assignment):
         if not Assignment.objectName():
             Assignment.setObjectName(u"Assignment")
-        Assignment.resize(400, 300)
+        Assignment.resize(400, 331)
         Assignment.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
 "border-radius: 10px;")
         self.verticalLayout = QVBoxLayout(Assignment)
+        self.verticalLayout.setSpacing(9)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.label = QLabel(Assignment)
         self.label.setObjectName(u"label")
         font = QFont()

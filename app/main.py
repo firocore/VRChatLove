@@ -1,18 +1,23 @@
 import webbrowser
 import ctypes
+from ctypes import c_short
+import asyncio
 
 from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QButtonGroup
-from PySide6.QtCore import QThread, Qt, QPoint
+from PySide6.QtCore import QThread, Qt, QPoint, Signal, Slot
+from qasync import QEventLoop
 
 from app.ui import resources_rc
 from app.ui.main_window import Ui_MainWindow
-from app.ui.debug import Ui_Denug
+from app.ui.debug import Ui_Debug
+from app.ui.debug_param_widget import Ui_debug_widget
 from app.ui.toys import Ui_Toys
 from app.ui.assignment import Ui_Assignment
 from app.ui.settings import Ui_Settings
 
 from app import constants
 from app.utils import versioning
+from app.osc.osc_listener import start_osc_server, store
 
 
 class ToysWidget(QWidget):
@@ -37,11 +42,98 @@ class SettingsWidget(QWidget):
 
 
 class DebugWidget(QWidget):
+    param_updated = Signal(str, object)
+    clear_params = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.ui = Ui_Denug()
+        self.ui = Ui_Debug()
         self.ui.setupUi(self)
 
+        self.favorites = []
+
+        self.param_widgets: dict[str, DebugParamWidget] = {}
+        self.param_updated.connect(self.update_param)
+
+        self.clear_params.connect(self.clear_all_params)
+
+    @Slot(str, object)
+    def update_param(self, name: str, value):
+        if name in self.param_widgets:
+            widget = self.param_widgets[name]
+            old_value = widget.get_value()
+            str_value = str(value)
+
+            if old_value != str_value:
+                widget.set_value(value)
+        else:
+            print("New parameter added:", name)
+            widget = DebugParamWidget(name, value)
+            widget.favorite_toggled.connect(self.on_favorite_toggled)
+            self.param_widgets[name] = widget
+            # Вставляем перед retreat, если он есть
+            idx = self.ui.verticalLayout_2.indexOf(self.ui.retreat)
+            self.ui.verticalLayout_2.insertWidget(idx, widget)
+
+    @Slot()
+    def clear_all_params(self):
+        for widget in self.param_widgets.values():
+            widget.setParent(None)
+            widget.deleteLater()
+
+        self.param_widgets.clear()
+        self.favorites.clear()
+
+    @Slot(str, bool)
+    def on_favorite_toggled(self, name: str, checked: bool):
+        widget = self.param_widgets.get(name)
+        if not widget:
+            return
+        
+        layout = self.ui.verticalLayout_2
+        layout.removeWidget(widget)
+
+        if checked:
+            # Добавить в список избранных и переместить наверх (последним среди избранных)
+            self.favorites.append(name)
+            # Найти индекс последнего избранного
+            if len(self.favorites) > 1:
+                last_fav_name = self.favorites[-2]
+                last_fav_widget = self.param_widgets[last_fav_name]
+                idx = layout.indexOf(last_fav_widget) + 1
+            else:
+                idx = 0
+            layout.insertWidget(idx, widget)
+        else:
+            # Убрать из избранных и переместить перед retreat
+            if name in self.favorites:
+                self.favorites.remove(name)
+            idx = layout.indexOf(self.ui.retreat)
+            layout.insertWidget(len(self.favorites), widget)
+
+class DebugParamWidget(QWidget):
+    favorite_toggled = Signal(str, bool)
+
+    def __init__(self, name: str, value, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_debug_widget()
+        self.ui.setupUi(self)
+        self.set_name(name)
+        self.set_value(value)
+
+        self.ui.button_favorite.toggled.connect(self.on_favorite_toggled)
+
+    def set_name(self, name: str):
+        self.ui.label_name.setText(str(name))
+
+    def set_value(self, value):
+        self.ui.label_value.setText(str(value))
+
+    def get_value(self) -> str:
+        return self.ui.label_value.text()
+
+    def on_favorite_toggled(self, checked: bool):
+        self.favorite_toggled.emit(self.ui.label_name.text(), checked)
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -138,8 +230,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if eventType == "windows_generic_MSG":
             msg = ctypes.wintypes.MSG.from_address(message.__int__())
             if msg.message == 0x0084:  # WM_NCHITTEST
-                x = msg.lParam & 0xFFFF
-                y = (msg.lParam >> 16) & 0xFFFF
+                x = c_short(msg.lParam & 0xFFFF).value
+                y = c_short((msg.lParam >> 16) & 0xFFFF).value
                 global_pos = QPoint(x, y)
                 pos = self.mapFromGlobal(global_pos)
                 w, h = self.width(), self.height()
@@ -164,13 +256,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     return True, 12  # HTTOP
                 if pos.y() > h - bw:
                     return True, 15  # HTBOTTOM
-                
+
         return False, 0
     
-    def resizeEvent(self, event):
-        print("resize", self.size())
-        super().resizeEvent(event)
-
 
     def toggle_maximize_restore(self):
         if self.isMaximized():
@@ -197,7 +285,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     import sys
+    from app.osc.osc_listener import set_debug_widget
+
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    sys.exit(app.exec())
+    
+    set_debug_widget(window.debug_widget)
+
+    loop = QEventLoop(app)
+    asyncio.set_event_loop(loop)
+    with loop:
+        loop.create_task(start_osc_server())
+        loop.run_forever()
+        sys.exit(app.exec())
+
+
+    

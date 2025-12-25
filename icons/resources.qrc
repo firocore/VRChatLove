@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file>debug/star.svg</file>
+    <file>debug/star_filled.svg</file>
     <file>header/settings.svg</file>
     <file>sidebar/human.svg</file>
     <file>sidebar/human_on.svg</file>

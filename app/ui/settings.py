@@ -22,11 +22,13 @@ class Ui_Settings(object):
     def setupUi(self, Settings):
         if not Settings.objectName():
             Settings.setObjectName(u"Settings")
-        Settings.resize(400, 300)
+        Settings.resize(400, 334)
         Settings.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
 "border-radius: 10px;")
         self.verticalLayout = QVBoxLayout(Settings)
+        self.verticalLayout.setSpacing(9)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.label = QLabel(Settings)
         self.label.setObjectName(u"label")
         font = QFont()

@@ -26,7 +26,9 @@ class Ui_Toys(object):
         Toys.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
 "border-radius: 10px;")
         self.verticalLayout = QVBoxLayout(Toys)
+        self.verticalLayout.setSpacing(9)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.label = QLabel(Toys)
         self.label.setObjectName(u"label")
         font = QFont()

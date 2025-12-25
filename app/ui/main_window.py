@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1249, 690)
+        MainWindow.resize(1249, 684)
         MainWindow.setMinimumSize(QSize(600, 400))
         font = QFont()
         font.setFamilies([u"Arial"])
@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.info.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_5 = QHBoxLayout(self.info)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalLayout_5.setContentsMargins(55, 0, 0, 0)
+        self.horizontalLayout_5.setContentsMargins(20, 0, 0, 0)
         self.label_name = QLabel(self.info)
         self.label_name.setObjectName(u"label_name")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
@@ -254,7 +254,7 @@ class Ui_MainWindow(object):
         self.button_toys.setIcon(icon6)
         self.button_toys.setIconSize(QSize(32, 42))
         self.button_toys.setCheckable(True)
-        self.button_toys.setChecked(True)
+        self.button_toys.setChecked(False)
         self.button_toys.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         self.button_toys.setAutoRaise(False)
 
@@ -326,8 +326,7 @@ class Ui_MainWindow(object):
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.stackedWidget.setMaximumSize(QSize(16777215, 16777215))
         self.stackedWidget.setFont(font1)
-        self.stackedWidget.setStyleSheet(u"background-color: rgb(8, 30, 48);\n"
-"border-radius: 10px;")
+        self.stackedWidget.setStyleSheet(u"")
         self.empty_page = QWidget()
         self.empty_page.setObjectName(u"empty_page")
         self.stackedWidget.addWidget(self.empty_page)
