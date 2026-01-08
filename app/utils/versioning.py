@@ -3,7 +3,7 @@ import re
 import httpx
 from PySide6.QtCore import QThread, Signal, QObject
 
-from app import constants
+from app.core import constants
 
 
 class VersionChecker(QObject):

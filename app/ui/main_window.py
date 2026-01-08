@@ -16,15 +16,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QPushButton, QSizePolicy, QStackedWidget,
-    QToolButton, QVBoxLayout, QWidget)
+    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
+    QStackedWidget, QToolButton, QVBoxLayout, QWidget)
 from app.ui import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1249, 684)
+        MainWindow.resize(1249, 687)
         MainWindow.setMinimumSize(QSize(600, 400))
         font = QFont()
         font.setFamilies([u"Arial"])
@@ -83,7 +83,9 @@ class Ui_MainWindow(object):
         font2.setPointSize(10)
         font2.setBold(True)
         self.label_name.setFont(font2)
-        self.label_name.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.label_name.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+"padding-left: 7px;\n"
+"padding-right: 7px;")
         self.label_name.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout_5.addWidget(self.label_name)
@@ -99,7 +101,9 @@ class Ui_MainWindow(object):
         self.button_version.setFont(font2)
         self.button_version.setStyleSheet(u"background-color: rgb(16, 59, 52);\n"
 "color: rgb(80, 232, 125);\n"
-"border-radius: 5px;")
+"border-radius: 5px;\n"
+"padding-left: 7px;\n"
+"padding-right: 7px;")
 
         self.horizontalLayout_5.addWidget(self.button_version)
 
@@ -119,6 +123,40 @@ class Ui_MainWindow(object):
         self.button_download.setIconSize(QSize(18, 18))
 
         self.horizontalLayout_5.addWidget(self.button_download)
+
+        self.button_remote_control = QPushButton(self.info)
+        self.button_remote_control.setObjectName(u"button_remote_control")
+        self.button_remote_control.setEnabled(True)
+        sizePolicy2.setHeightForWidth(self.button_remote_control.sizePolicy().hasHeightForWidth())
+        self.button_remote_control.setSizePolicy(sizePolicy2)
+        self.button_remote_control.setMaximumSize(QSize(150, 20))
+        self.button_remote_control.setFont(font2)
+        self.button_remote_control.setStyleSheet(u"background-color: rgb(104, 0, 1);\n"
+"color: rgb(255, 33, 36);\n"
+"border-radius: 5px;\n"
+"padding-left: 7px;\n"
+"padding-right: 7px;")
+        self.button_remote_control.setFlat(False)
+
+        self.horizontalLayout_5.addWidget(self.button_remote_control)
+
+        self.button_external_control = QPushButton(self.info)
+        self.button_external_control.setObjectName(u"button_external_control")
+        sizePolicy2.setHeightForWidth(self.button_external_control.sizePolicy().hasHeightForWidth())
+        self.button_external_control.setSizePolicy(sizePolicy2)
+        self.button_external_control.setMaximumSize(QSize(150, 20))
+        self.button_external_control.setFont(font2)
+        self.button_external_control.setStyleSheet(u"background-color: rgb(104, 0, 1);\n"
+"color: rgb(255, 33, 36);\n"
+"border-radius: 5px;\n"
+"padding-left: 7px;\n"
+"padding-right: 7px;")
+
+        self.horizontalLayout_5.addWidget(self.button_external_control)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer)
 
         self.retreat_2 = QFrame(self.info)
         self.retreat_2.setObjectName(u"retreat_2")
@@ -148,13 +186,9 @@ class Ui_MainWindow(object):
         self.control.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_6 = QHBoxLayout(self.control)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.retreat_3 = QFrame(self.control)
-        self.retreat_3.setObjectName(u"retreat_3")
-        self.retreat_3.setFont(font3)
-        self.retreat_3.setFrameShape(QFrame.StyledPanel)
-        self.retreat_3.setFrameShadow(QFrame.Raised)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_6.addWidget(self.retreat_3)
+        self.horizontalLayout_6.addItem(self.horizontalSpacer_2)
 
         self.button_settings_h = QToolButton(self.control)
         self.button_settings_h.setObjectName(u"button_settings_h")
@@ -199,6 +233,8 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.control)
 
+        self.horizontalLayout_4.setStretch(0, 2)
+        self.horizontalLayout_4.setStretch(1, 1)
 
         self.verticalLayout_2.addWidget(self.header)
 
@@ -294,13 +330,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.button_debug)
 
-        self.retreat = QFrame(self.sidebar)
-        self.retreat.setObjectName(u"retreat")
-        self.retreat.setFont(font1)
-        self.retreat.setFrameShape(QFrame.StyledPanel)
-        self.retreat.setFrameShadow(QFrame.Raised)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_3.addWidget(self.retreat)
+        self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.button_settings = QToolButton(self.sidebar)
         self.button_settings.setObjectName(u"button_settings")
@@ -348,6 +380,8 @@ class Ui_MainWindow(object):
         self.label_name.setText(QCoreApplication.translate("MainWindow", u"VRCLove", None))
         self.button_version.setText(QCoreApplication.translate("MainWindow", u"v0.0.0", None))
         self.button_download.setText("")
+        self.button_remote_control.setText(QCoreApplication.translate("MainWindow", u"Remote Contol", None))
+        self.button_external_control.setText(QCoreApplication.translate("MainWindow", u"External contol", None))
         self.button_settings_h.setText("")
         self.button_minimize.setText("")
         self.button_maximize.setText("")

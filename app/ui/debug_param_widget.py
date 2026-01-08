@@ -23,14 +23,14 @@ class Ui_debug_widget(object):
     def setupUi(self, debug_widget):
         if not debug_widget.objectName():
             debug_widget.setObjectName(u"debug_widget")
-        debug_widget.resize(1103, 45)
+        debug_widget.resize(490, 35)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(debug_widget.sizePolicy().hasHeightForWidth())
         debug_widget.setSizePolicy(sizePolicy)
-        debug_widget.setMinimumSize(QSize(0, 45))
-        debug_widget.setMaximumSize(QSize(16777215, 45))
+        debug_widget.setMinimumSize(QSize(0, 35))
+        debug_widget.setMaximumSize(QSize(16777215, 35))
         debug_widget.setStyleSheet(u"QWidget {\n"
 "	background-color: #112d43;\n"
 "	border: none;\n"
@@ -44,7 +44,7 @@ class Ui_debug_widget(object):
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_2 = QHBoxLayout(self.frame)
-        self.horizontalLayout_2.setSpacing(9)
+        self.horizontalLayout_2.setSpacing(15)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(-1, 0, -1, 0)
         self.label_name = QLabel(self.frame)
@@ -78,13 +78,16 @@ class Ui_debug_widget(object):
         icon.addFile(u":/icons/debug/star.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         icon.addFile(u":/icons/debug/star_filled.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         self.button_favorite.setIcon(icon)
-        self.button_favorite.setIconSize(QSize(28, 28))
+        self.button_favorite.setIconSize(QSize(24, 24))
         self.button_favorite.setCheckable(True)
         self.button_favorite.setChecked(False)
         self.button_favorite.setAutoRaise(False)
 
         self.horizontalLayout_2.addWidget(self.button_favorite)
 
+        self.horizontalLayout_2.setStretch(0, 3)
+        self.horizontalLayout_2.setStretch(1, 1)
+        self.horizontalLayout_2.setStretch(2, 1)
 
         self.horizontalLayout.addWidget(self.frame)
 

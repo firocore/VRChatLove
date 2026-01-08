@@ -13,7 +13,7 @@ def set_debug_widget(widget):
     global debug_widget
     debug_widget = widget
 
-def osc_handler(address, *args):
+def osc_handler(address: str, *args):
     value = args[0] if args else None
     # print(f"OSC param: {address} = {value}")
 
@@ -21,6 +21,8 @@ def osc_handler(address, *args):
         debug_widget.clear_params.emit()
         store.clear_all()
         return
+    
+    address = address.replace("/avatar/parameters/", "")
     
     store.update(address, value)
 

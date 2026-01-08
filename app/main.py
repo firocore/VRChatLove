@@ -3,8 +3,10 @@ import ctypes
 from ctypes import c_short
 import asyncio
 
-from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QButtonGroup
-from PySide6.QtCore import QThread, Qt, QPoint, Signal, Slot
+from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QButtonGroup, QPushButton
+from PySide6.QtCore import QThread, Qt, QPoint, Signal, Slot, QObject, QTimer, Property, QPropertyAnimation, QEasingCurve
+from PySide6.QtGui import QColor
+from PySide6.QtMultimedia import QSoundEffect
 from qasync import QEventLoop
 
 from app.ui import resources_rc
@@ -15,9 +17,73 @@ from app.ui.toys import Ui_Toys
 from app.ui.assignment import Ui_Assignment
 from app.ui.settings import Ui_Settings
 
-from app import constants
+from app.core import constants
 from app.utils import versioning
 from app.osc.osc_listener import start_osc_server, store
+
+class AnimatedButtonController(QObject):
+    finished = Signal()
+
+    def __init__(
+        self,
+        button: QPushButton,
+        sound_start_path: str,
+        sound_end_path: str,
+        border_color: str = "#50e897",
+        border_duration: int = 2000,
+        countdown: int = 3,
+        parent=None
+    ):
+        super().__init__(parent)
+        self.button = button
+        # self.sound_start = QSoundEffect()
+        # self.sound_start.setSource(sound_start_path)
+        # self.sound_end = QSoundEffect()
+        # self.sound_end.setSource(sound_end_path)
+        self.border_color = border_color
+        self.border_duration = border_duration
+        self.countdown = countdown
+
+        self._original_text = button.text()
+        self._original_style = button.styleSheet()
+
+        self.button.clicked.connect(self.start_animation)
+
+    def start_animation(self):
+        # self.sound_start.play()
+        self.button.setStyleSheet(
+            f"{self._original_style}; color: #3d6381;"
+        )
+        self._count = self.countdown
+        self._countdown_timer = QTimer(self)
+        self._countdown_timer.timeout.connect(self._on_countdown)
+        self._on_countdown()
+        self._countdown_timer.start(1000)
+
+    def _on_countdown(self):
+        if self._count > 0:
+            self.button.setText(str(self._count))
+            self._count -= 1
+        else:
+            self._countdown_timer.stop()
+            self.button.setText(self._original_text)
+            # self.sound_end.play()
+            self.finished.emit()
+            self.animate_border()
+            
+
+    def animate_border(self):
+        self.button.setStyleSheet(
+            f"{self._original_style}; border: 2px solid {self.border_color};"
+        )
+        self._border_timer = QTimer(self)
+        self._border_timer.setSingleShot(True)
+        self._border_timer.timeout.connect(self._on_animation_finished)
+        self._border_timer.start(self.border_duration)
+
+    def _on_animation_finished(self):
+        self.button.setStyleSheet(self._original_style)
+
 
 
 class ToysWidget(QWidget):
@@ -57,8 +123,22 @@ class DebugWidget(QWidget):
 
         self.clear_params.connect(self.clear_all_params)
 
+        self.ui.button_clear.clicked.connect(self.clear_all_params)
+
+        self.controller = AnimatedButtonController(
+            self.ui.button_reload,
+            "file:///path/to/start.wav",
+            "file:///path/to/end.wav",
+        )
+
+        self.controller.finished.connect(self.clear_all_params)
+
+        
+
     @Slot(str, object)
     def update_param(self, name: str, value):
+        self.ui.label_retreat.hide()
+
         if name in self.param_widgets:
             widget = self.param_widgets[name]
             old_value = widget.get_value()
@@ -83,6 +163,7 @@ class DebugWidget(QWidget):
 
         self.param_widgets.clear()
         self.favorites.clear()
+        self.ui.label_retreat.show()
 
     @Slot(str, bool)
     def on_favorite_toggled(self, name: str, checked: bool):
@@ -159,6 +240,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.button_download.hide()
         self.button_download.clicked.connect(self.on_download_clicked)
+
+        # --- Отражение статусов ---
+        self.button_external_control.clicked.connect(self.on_external_control_clicked)
+        self.button_remote_control.clicked.connect(self.on_remote_control_clicked)
         
         # --- Проверка версии ---
         self.version_checker = versioning.VersionChecker()
@@ -270,7 +355,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_version_checked(self, remote_version: str):
         if remote_version and remote_version != constants.APP_VERSION:
             self.button_download.show()
-            self.on_download_clicked()
+            # self.on_download_clicked()
         else:
             self.button_download.hide()
 
@@ -281,15 +366,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_download_clicked(self):
         webbrowser.open(constants.URL_REPO + "/releases")
 
+    def on_remote_control_clicked(self):
+        self.button_remote_control.hide()
+
+    def on_external_control_clicked(self):
+        self.button_external_control.hide()
+
 
 
 if __name__ == "__main__":
     import sys
     from app.osc.osc_listener import set_debug_widget
+    from app.toys.lovense import LovenseController
 
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
+
+    lovense = LovenseController()
     
     set_debug_widget(window.debug_widget)
 
@@ -297,6 +391,7 @@ if __name__ == "__main__":
     asyncio.set_event_loop(loop)
     with loop:
         loop.create_task(start_osc_server())
+        loop.create_task(lovense.get_remote_toys())
         loop.run_forever()
         sys.exit(app.exec())
 
