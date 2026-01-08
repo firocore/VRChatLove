@@ -1,4 +1,4 @@
 # VRChatLove
-**Version:** 0.0.1b
+**Version:** 0.0.2
 
 App description
