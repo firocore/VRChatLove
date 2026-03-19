@@ -32,7 +32,7 @@ def osc_handler(address: str, *args):
 dispatcher = Dispatcher()
 dispatcher.set_default_handler(osc_handler)
 
-async def start_osc_server(ip="0.0.0.0", port=9001):
+async def start_osc_server(ip="0.0.0.0", port=9005):
     server = AsyncIOOSCUDPServer((ip, port), dispatcher, asyncio.get_event_loop())
     transport, protocol = await server.create_serve_endpoint()
     print(f"OSC server listening on {ip}:{port}")

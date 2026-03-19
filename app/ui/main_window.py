@@ -39,10 +39,14 @@ class Ui_MainWindow(object):
         MainWindow.setDocumentMode(False)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"#centralwidget {\n"
+"    border: 1px solid #333d45;\n"
+"    border-radius: 10px;\n"
+"}")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setContentsMargins(1, 1, 1, 1)
         self.header = QWidget(self.centralwidget)
         self.header.setObjectName(u"header")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
@@ -58,7 +62,9 @@ class Ui_MainWindow(object):
         self.header.setFont(font1)
         self.header.setStyleSheet(u"QToolButton {\n"
 "  	border: none;\n"
-"}")
+"};\n"
+"\n"
+"")
         self.horizontalLayout_4 = QHBoxLayout(self.header)
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")

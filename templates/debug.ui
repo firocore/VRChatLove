@@ -31,17 +31,6 @@ QScrollArea {
 	border-radius: 10px;
 }
 
-QPushButton {
-	background-color: #112d43;
-	color: #ffffff;
-	border: none;
-	border-radius: 7px;
-}
-
-QPushButton:hover {
-	background-color: #1a3d59;
-}
-
 QScrollBar::handle:vertical {
     background: #1a3d59;           /* Цвет &quot;ползунка&quot; */
     min-height: 30px;              /* Минимальная высота */
@@ -66,6 +55,18 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;              /* Убираем промежутки */
+}
+
+
+QPushButton {
+	background-color: #112d43;
+	color: #ffffff;
+	border: none;
+	border-radius: 7px;
+}
+
+QPushButton:hover {
+	background-color: #1a3d59;
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">

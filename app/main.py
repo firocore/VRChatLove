@@ -51,6 +51,7 @@ class AnimatedButtonController(QObject):
 
     def start_animation(self):
         # self.sound_start.play()
+        self.button.setEnabled(False)
         self.button.setStyleSheet(
             f"{self._original_style}; color: #3d6381;"
         )
@@ -68,6 +69,7 @@ class AnimatedButtonController(QObject):
             self._countdown_timer.stop()
             self.button.setText(self._original_text)
             # self.sound_end.play()
+            self.button.setEnabled(True)
             self.finished.emit()
             self.animate_border()
             
